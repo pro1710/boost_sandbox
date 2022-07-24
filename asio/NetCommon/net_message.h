@@ -18,7 +18,7 @@ namespace net {
             return sizeof(message_header<T>) + body.size();
         }
    
-        friend std::ostream& operator << (std::ostream& os, const message<T>& msg) {
+        friend std::ostream& operator<<(std::ostream& os, const message<T>& msg) {
             os << "ID:" << static_cast<int>(msg.header.id) 
             << " Size:" << msg.header.size;
             
@@ -26,7 +26,7 @@ namespace net {
         }
 
         template <typename DataType>
-        friend message<T>& operator << (message<T>& msg, const DataType& data) {
+        friend message<T>& operator<<(message<T>& msg, const DataType& data) {
             static_assert(std::is_standard_layout<DataType>::value, "Data doesn't have a standart layout");
 
             size_t body_size = msg.body.size();
@@ -41,7 +41,7 @@ namespace net {
         }
 
         template <typename DataType>
-        friend message<T>& operator >> (message<T>& msg, DataType& data) {
+        friend message<T>& operator>>(message<T>& msg, DataType& data) {
             static_assert(std::is_standard_layout<DataType>::value, "Data doesn't have a standart layout");
 
             size_t loc = msg.body.size() - sizeof(DataType);
@@ -53,6 +53,20 @@ namespace net {
             msg.header.size = msg.size();
 
             return msg;
+        }
+    };
+
+    template <typename T>
+    class connection;
+
+    template <typename T>
+    struct owned_message {
+        std::shared_ptr<connection<T>> remote = nullptr;
+        message<T> msg;
+
+        friend std::ostream& operator<<(std::ostream& os, const owned_message<T>& msg) {
+            os << msg.msg;
+            return os;
         }
     };
 }
