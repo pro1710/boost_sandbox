@@ -14,3 +14,5 @@ include_directories(${BOOST_ROOT})
 # add_definitions(-DBOOST_ALL_NO_LIB -DBOOST_CHRONO_HEADER_ONLY -DBOOST_BIND_GLOBAL_PLACEHOLDERS)
 
 add_subdirectory(example)
+add_subdirectory(NetCommon)
+add_subdirectory(NetClient)
